@@ -2,8 +2,8 @@ apiVersion: v1
 entries:
   milvus:
   - apiVersion: v1
-    appVersion: 0.10.1
-    created: "2020-06-20T14:50:32.240561902Z"
+    appVersion: 0.10.0
+    created: "2020-06-28T04:20:59.887070705Z"
     dependencies:
     - condition: mysql.enabled
       name: mysql
@@ -13,7 +13,7 @@ entries:
       version: 1.6.4
     description: Milvus is an open source similarity search engine for massive-scalefeature
       vectors.
-    digest: 90e4fec465cad0bda69aac93d905e42212e23f1515c396b85a71e2828c67fb87
+    digest: cb2c0921954b60fbb598fa11e802a29f0c6c9f55da6d412d93c681471d178126
     home: https://milvus.io/
     icon: https://raw.githubusercontent.com/milvus-io/docs/master/assets/milvus_logo.png
     keywords:
@@ -32,6 +32,6 @@ entries:
     - https://github.com/milvus-io/milvus
     - https://github.com/milvus-io/milvus-helm
     urls:
-    - https://github.com/ZhifengZhang-CN/milvus-helm/releases/download/milvus-0.10.1/milvus-0.10.1.tgz
-    version: 0.10.1
-generated: "2020-06-20T14:50:32.125310431Z"
+    - https://github.com/ZhifengZhang-CN/milvus-helm/releases/download/milvus-0.10.0/milvus-0.10.0.tgz
+    version: 0.10.0
+generated: "2020-06-28T04:20:59.783271847Z"
