@@ -1,0 +1,37 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "milvus.fullname" . }}
+  labels:
+{{ include "milvus.labels" . | indent 4 }}
+{{- if .Values.ingress.labels }}
+{{ toYaml .Values.ingress.labels | indent 4 }}
+{{- end }}
+{{- with .Values.ingress.annotations }}
+  annotations:
+{{ toYaml . | indent 4 }}
+{{- end }}
+spec:
+{{- if .Values.ingress.tls.enabled }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+{{- end }}
+{{- end }}
+  rules:
+    - http:
+        paths:
+{{- if .Values.cluster.enabled }}
+          - path: {{ .Values.ingress.readonlyPath }}
+            backend:
+              serviceName: {{ template "milvus.readonly.fullname" . }}
+              servicePort: {{ .Values.readonly.service.port }}
+{{- end }}
+          - path: {{ .Values.ingress.writablePath }}
+            backend:
+              serviceName: {{ template "milvus.writable.fullname" . }}
+              servicePort: {{ .Values.service.port }}
+      host: {{ .Values.ingress.host }}
+{{- end }}

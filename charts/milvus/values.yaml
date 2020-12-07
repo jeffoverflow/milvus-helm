@@ -64,6 +64,31 @@ restartPolicy: Always
 ##
 terminationGracePeriodSeconds: 30
 
+##
+## Ingress configuration
+ingress:
+  ##
+  ## enable ingress
+  enabled: false
+  labels: {}
+  annotations: {}
+
+  ##
+  ## Ingress hostname
+  host: ""
+
+  writablePath: ""
+
+  readonlyPath: ""
+
+  tls:
+    ## Set to "true" to enable TLS termination at the ingress
+    enabled: false
+    ## If enabled, set "secretName" to the secret containing the TLS private key and certificate
+    ## Example:
+    ## secretName: example-com-crt
+
+
 ## Expose the Milvus service to be accessed from outside the cluster (LoadBalancer service).
 ## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
 ## ref: http://kubernetes.io/docs/user-guide/services/
@@ -212,38 +237,6 @@ affinity: {}
 ## Additional deployment annotations
 podAnnotations: {}
 
-## Define serviceAccount names for Mishards
-serviceAccounts:
-  mishards:
-    create: false
-    name:
-
-## Mishards Configuration
-mishards:
-  image:
-    repository: milvusdb/mishards
-    tag: 0.10.3
-    pullPolicy: IfNotPresent
-
-  replicas: 1
-  resources:
-    limits:
-      memory: "2Gi"
-      cpu: "2.0"
-    requests:
-      memory: "1Gi"
-      cpu: "0.5"
-
-  ## Mishards conf
-  debug: true
-  maxWorkers: 50
-  discoveryClassName: kubernetes
-  trace:
-    enabled: false
-    tracerClassName: jaeger
-    tracingReportingHost: jaeger
-    tracingReportingPort: 5775
-
 ## Milvus Readonly Server Configuration
 readonly:
   logs:
@@ -276,6 +269,29 @@ readonly:
 
   extraConfiguration: {}
 
+  ## Expose the Milvus readonly service to be accessed from outside the cluster (LoadBalancer service).
+  ## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
+  ## ref: http://kubernetes.io/docs/user-guide/services/
+  ##
+  service:
+    type: ClusterIP
+    port: 19530
+    annotations: {}
+    labels: {}
+
+    ## List of IP addresses at which the Milvus readonly service is available
+    ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+    ##
+    externalIPs: []
+    #   - externalIp1
+
+    # LoadBalancerSourcesRange is a list of allowed CIDR values, which are combined with ServicePort to
+    # set allowed inbound rules on the security group assigned to the master load balancer
+    loadBalancerSourceRanges:
+    - 0.0.0.0/0
+    # Optionally assign a known public LB IP
+    # loadBalancerIP: 1.2.3.4
+
 ## Milvus Admin Configuration
 admin:
   enabled: false
@@ -303,7 +319,7 @@ admin:
     annotations: {}
     labels: {}
 
-    ## List of IP addresses at which the Milvus server service is available
+    ## List of IP addresses at which the Milvus admin service is available
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
     ##
     externalIPs: []
