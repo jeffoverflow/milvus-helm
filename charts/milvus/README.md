@@ -16,29 +16,29 @@ This chart bootstraps Milvus deployment on a Kubernetes cluster using the Helm p
 
 1. Add the stable repository
 ```bash
-$ helm repo add stable https://kubernetes-charts.storage.googleapis.com
+$ helm repo add stable https://charts.helm.sh/stable
+$ helm repo add milvus https://milvus-io.github.io/milvus-helm/
 ```
-2. Install Chart dependencies
-```bash
-# in 'milvus-helm/charts/milvus'
-$ helm dep update
+
+2. Update charts repositories
 ```
+$ helm repo update
+```
+
 3. Install Helm package
 
 To install the chart with the release name `my-release`:
 
 ```bash
 # Helm v2.x
-$ cd milvus-helm
-$ helm install --name my-release .
+$ helm install --name my-release milvus/milvus
 ```
 
 or
 
 ```bash
 # Helm v3.x
-$ cd milvus-helm
-$ helm install my-release  .
+$ helm install my-release milvus/milvus
 ```
 
 > **Tip**: To list all releases, using `helm list`.
@@ -94,7 +94,6 @@ The following table lists the configurable parameters of the Milvus chart and th
 | `logs.logRotateNum`                       | The maximum number of log files that Milvus keeps for each logging level, num range [0, 1024], 0 means unlimited. | `0` |
 | `cache.insertBufferSize`                  | Maximum insert buffer size allowed (GB)       | `1GB`                                                   |
 | `cache.cacheSize`                         | Size of CPU memory used for cache  (GB)       | `4GB`                                                   |
-| `network.httpEnabled`                     | Enable web server or not.                     | `true`                                                  |
 | `network.httpPort`                        | Port that Milvus web server monitors.         | `19121`                                                 |
 | `wal.enabled`                             | Enable write-ahead logging.                   | `true`                                                  |
 | `wal.recoveryErrorIgnore`                 | Whether to ignore logs with errors that happens during WAL | `true`                                     |
@@ -118,6 +117,12 @@ The following table lists the configurable parameters of the Milvus chart and th
 | `readonly.gpu.gpuSearchThreshold`         | GPU search threshold                          | `1000`                                                  |
 | `readonly.gpu.searchDevices`              | Define the GPU devices used for search computation | `[gpu0]`                                           |
 | `readonly.gpu.buildIndexDevices`          | Define the GPU devices used for index building | `[gpu0]`                                               |
+| `mishards.debug`                          | Choose if to enable Debug work mode.          | `true`                                                  |
+| `mishards.discoveryClassName`             | Under the plug-in search path, search the class based on the class name, and instantiate it. Currently, the system provides 2 classes: static and kubernetes. | `kubernetes` |
+| `mishards.trace.enabled`                  | Enable Mishards tracing service.              | `false`                                                 |
+| `mishards.trace.tracerClassName`          | Under the plug-in search path, search the class based on the class name, and instantiate it. Currently, only Jaeger is supported. | `Jaeger` |
+| `mishards.trace.tracingReportingHost`     | The host of the tracing service.              | `jaeger`                                                |
+| `mishards.trace.tracingReportingPort`     | The port of the tracing service.              | `5775`                                                  |
 
 
 ### Milvus Deployment Configuration
@@ -131,7 +136,7 @@ The following table lists the configurable parameters of the Milvus chart and th
 | `restartPolicy`                           | Restart policy for all containers             | `Always`                                                |
 | `initContainerImage`                      | Init container image                          | `alpine:3.8`                                            |
 | `image.repository`                        | Image repository                              | `milvusdb/milvus`                                       |
-| `image.tag`                               | Image tag                                     | `0.10.0-cpu-d061620-5f3c00`                             |
+| `image.tag`                               | Image tag                                     | `0.10.5-cpu-d010621-4eda95`                             |
 | `image.pullPolicy`                        | Image pull policy                             | `IfNotPresent`                                          |
 | `image.pullSecrets`                       | Image pull secrets                            | `{}`                                                    |
 | `image.resources`                         | CPU/GPU/Memory resource requests/limits       | `{}`                                                    |
@@ -175,7 +180,7 @@ The following table lists the configurable parameters of the Milvus chart and th
 | `podDisruptionBudget.minAvailable`        | Pod disruption minimum available              | `unset`                                                 |
 | `podDisruptionBudget.maxUnavailable`      | Pod disruption maximum unavailable            | `unset`                                                 |
 | `mishards.image.repository`               | Mishards image repository                     | `milvusdb/mishards`                                     |
-| `mishards.image.tag`                      | Mishards image tag                            | `0.10.0`                                                |
+| `mishards.image.tag`                      | Mishards image tag                            | `0.10.5`                                                |
 | `mishards.image.pullPolicy`               | Mishards image pull policy                    | `IfNotPresent`                                          |
 | `mishards.replicas`                       | Number of mishards nodes                      | `1`                                                     |
 | `mishards.resources`                      | Mishards CPU/GPU/Memory resource requests/limits | `{}`                                                 |
